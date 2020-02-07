@@ -25,7 +25,7 @@ Login.prototype.loginControl = function (success) {
     }
     if (logged === 'true') {
         success();
-        return true;
+        return false;
     }
 }
 let LoginController = new Login();

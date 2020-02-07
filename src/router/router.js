@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import Index from '@/components/Index'
 import Login from '@/components/Login'
 import Register from '@/components/Register'
-import UserInfo from '@/components/UserInfo'
+import UserCenter from '@/components/UserCenter/UserCenter'
 import Test from '@/components/Test'
 Vue.use(Router)
 export default new Router({
@@ -35,9 +35,9 @@ export default new Router({
       }
     },
     {
-      path: '/userInfo',
-      name: 'UserInfo',
-      component: UserInfo,
+      path: '/userCenter',
+      name: 'UserCenter',
+      component: UserCenter,
       meta: {
         title: '个人中心'
       }
