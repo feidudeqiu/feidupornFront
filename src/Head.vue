@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div style="width:100%;">
         <div class="head flex-row-center">
             <div class="flex-row-center" style="flex:2;">
                 <img src="~static/img/logo.png" @click="$router.push('/index')" style="cursor:pointer"/>
@@ -40,7 +40,7 @@
                         <img class="menu-icon" src="~static/img/login.png">
                         <div class="choice">登录</div>
                     </div>
-                    <div class="flex-row-inline menu-item">
+                    <div class="flex-row-inline menu-item"  @click="$router.push('/register');">
                         <img class="menu-icon" src="~static/img/register.png">
                         <div class="choice">注册</div>
                     </div>
@@ -155,7 +155,6 @@ export default {
             }).catch(function (error) {
                 that.logged = false;
                 sessionStorage.setItem("logged", false);
-                that.logged = LoginController.loginControl(success);
                 console.info(error);
             })
         }

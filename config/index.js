@@ -12,7 +12,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/api': {
-              target: 'http://127.0.0.1:8080/api', //你要访问的服务器域名
+              target: 'http://192.168.0.105:8080/api', //你要访问的服务器域名
               changeOrigin: true, //允许跨域
               pathRewrite: {
                 '^/api': ''   //需要rewrite重写的,
@@ -21,7 +21,7 @@ module.exports = {
     },
 
     // Various Dev Server settings
-    host: 'localhost', // can be overwritten by process.env.HOST
+    host: '192.168.0.105', // can be overwritten by process.env.HOST
     port: 80, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: false,
     errorOverlay: true,

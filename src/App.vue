@@ -5,6 +5,7 @@
 </template>
 
 <script>
+import 'view-design/dist/styles/iview.css';
 import 'vant/lib/index.css';
 export default {
   name: 'App',

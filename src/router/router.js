@@ -5,6 +5,8 @@ import Login from '@/components/Login'
 import Register from '@/components/Register'
 import UserCenter from '@/components/UserCenter/UserCenter'
 import Test from '@/components/Test'
+import AddNote from '@/components/Note/AddNote'
+import AddNoteSet from '@/components/Note/AddNoteSet'
 Vue.use(Router)
 export default new Router({
   mode: 'history',
@@ -43,11 +45,27 @@ export default new Router({
       }
     },
     {
+      path: '/addNote',
+      name: 'AddNote',
+      component: AddNote,
+      meta: {
+        title: '添加笔记'
+      }
+    },
+    {
       path: '/test',
       name: 'Test',
       component: Test,
       meta: {
         title: '测试'
+      }
+    },
+    {
+      path: '/addNoteSet',
+      name: 'AddNoteSet',
+      component: AddNoteSet,
+      meta: {
+        title: '添加笔记集'
       }
     }
   ]

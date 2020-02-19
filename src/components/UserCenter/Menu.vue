@@ -16,7 +16,7 @@
                 <img src="~static/img/security.png">
                 <span>安全中心</span>
             </a>
-        </div>
+        </div>4
     </div>
 </template>
 <style scoped>

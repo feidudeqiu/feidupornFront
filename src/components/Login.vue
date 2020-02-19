@@ -17,17 +17,17 @@
                         <div class="flex-row-center">
                             <div class="flex-row-inline" style="justify-content: space-between;width:100%;">
                                 <div class="flex-row-inline" v-if="allowLocalStorage">
-                                    <van-checkbox shape="square" checked-color="#337ab7" icon-size="12px" v-model="remembered">&thinsp;</van-checkbox>
-                                    <div style="color: #337ab7;font-size: 12px;" >七天内记住我</div>
+                                    <van-checkbox shape="square" checked-color="#2d8cf0" icon-size="12px" v-model="remembered">&thinsp;</van-checkbox>
+                                    <div style="color: #2b85e4;font-size: 12px;" >七天内记住我</div>
                                 </div>
                                 <div v-else></div>
-                                <div style="color: #337ab7;font-size: 12px;">忘记密码</div>
+                                <div style="color: #2b85e4;font-size: 12px;">忘记密码</div>
                             </div>
                         </div>
                         <div class="flex-row-center">
                             <div class="flex-row-inline" style="width:100%;justify-content: space-between;margin-top:10px;">
-                                <div class="option-button flex-row-center" style="background: #3c763d;cursor:pointer;color:white" @click="login()">登录</div>
-                                <div class="option-button flex-row-center" style="background: #31708f;cursor:pointer;color:white" @click="register()">注册</div>
+                                <div class="option-button flex-row-center" style="background: #19be6b;cursor:pointer;color:white" @click="login()">登录</div>
+                                <div class="option-button flex-row-center" style="background: #2b85e4;cursor:pointer;color:white" @click="register()">注册</div>
                             </div>
                         </div>
                     </div>
