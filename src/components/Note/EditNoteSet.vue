@@ -1,7 +1,7 @@
 <template>
     <div>
         <porn-head></porn-head>
-        <Drawer :closable="true" :draggable="true" @on-close="setFlag = false" :scrollable="true" :width="330" :mask="false" placement="left" title="笔记集" v-model="setFlag">
+        <Drawer :closable="true" :draggable="true" @on-close="setFlag = false" :scrollable="true" :width="330" :mask="false" placement="left" title="文集" v-model="setFlag">
             <Table :width="296" :max-height="windowHeight-90" :columns="setColumns" :data="setData">
                 <template slot-scope="{ index }" slot="index">
                     <span>{{index}}</span>
@@ -39,7 +39,7 @@
         <div class="content">
             <div class="flex-column-center" style="margin-top:30px;">
                 <div style="width:100%;height:30px;border-bottom:1px solid #ddd;margin-bottom:45px;">
-                    <span style="color:black;background:white;font-size:38px;line-height:58px;padding:0 20px;">创建文集</span>
+                    <span style="color:black;background:white;font-size:38px;line-height:58px;padding:0 20px;">编辑文集</span>
                 </div>
                 <div class="note-item flex-row-center icon-brow" style="background-repeat:no-repeat;background-size:cover;background-position:center"
                     :style="{'background-image': 'url('+image+')'}">
@@ -65,8 +65,8 @@
                         <span style="color:#9ea7b4;font-size:14px">笔记数：</span>
                         <span style="color:#464c5b;font-size:14px">{{setData.length}}</span>
                     </div>
-                    <button @click="createNoteSet()" class="flex-row-center" style="border:none;border-radius:5px;flex:2;cursor:pointer;height:30px;color:white;background:#337ab7">
-                        <span>创建</span>
+                    <button @click="editNoteSet()" class="flex-row-center" style="border:none;border-radius:5px;flex:2;cursor:pointer;height:30px;color:white;background:#337ab7">
+                        <span>修改</span>
                     </button>
                 </div>
             </div>
@@ -91,7 +91,7 @@
 import Head from "@/Head.vue"
 import {Table, Drawer, Input, Icon, RadioGroup, Message, Radio} from "view-design"
 export default {
-    name: "AddNoteSet",
+    name: "EditNoteSet",
     components: {
         "porn-head": Head,
         "iview-input": Input,
@@ -111,6 +111,7 @@ export default {
             windowHeight: 0,
             setNoteMapper: {},
             title: '',
+            setDataChanged: false,
             noteSetType: 'public',
             image: 'https://tva1.sinaimg.cn/large/6f8a2832gy1g6s9wfpverj22yo1og7wh.jpg',
             setColumns: [
@@ -184,7 +185,7 @@ export default {
         }
     },
     created () {
-        
+        console.info("hello")
     },
     mounted () {
         var that = this;
@@ -199,6 +200,22 @@ export default {
     methods: {
         load () {
             var that = this;
+            var setNo = this.$route.query.noteSetNo;
+            this.axios.get('/api/note-set/get-noteSet-info-by-setNo?setNo=' + setNo)
+            .then(function (res) {
+                for (let i = 0; i < res.data.noteNos.length; i++) {
+                    var note = {};
+                    note.no = res.data.noteNos[i];
+                    that.setData.push(note);
+                    that.setNoteMapper[note.no] = true;
+                }
+                that.image = res.data.setImage;
+                that.title = res.data.title;
+                that.noteSetType = res.data.type;
+            })
+            .catch(function (err) {
+                Message.error(err.response.data.msg);
+            });
             this.axios.get('/api/note/get-notes-outline')
             .then(function (res) {
                 console.info(res);
@@ -213,12 +230,14 @@ export default {
             note.no = this.noteData[index].no;
             this.setData.push(note);
             this.setNoteMapper[note.no] = true;
+            this.setDataChanged = true;
         },
         addGlobalNote () {
             var note = {};
             note.no = this.globalNote.noteNo;
             this.setData.push(note);
             this.setNoteMapper[note.no] = true;
+            this.setDataChanged = true;
         },
         deleteGlobalNote () {
             for (let i = 0; i < this.setData.length; i++) {
@@ -227,10 +246,12 @@ export default {
                 }
             }
             this.setNoteMapper[this.globalNote.noteNo] = undefined;
+            this.setDataChanged = true;
         },
         deleteNote (row, index) {
             this.setData.splice(index, 1);
             this.setNoteMapper[row.no] = undefined;
+            this.setDataChanged = true;
         },
         deleteNoteFromNotes (row) {
             for (let index = 0; index < this.setData.length; index++) {
@@ -254,27 +275,30 @@ export default {
         windowScroll () {
             this.height = window.innerHeight / 2 + document.documentElement.scrollTop;
         },
-        createNoteSet () {
+        editNoteSet () {
             var noteList = [];
-            for (let i = 0; i < this.setData.length; i++) {
-                noteList.push(this.setData[i].no.toString());
-            }
             let data = {
               title: this.title,
               image: this.image,
               noteSetType: this.noteSetType,
-              noteList: noteList
+              setNo: parseInt(this.$route.query.noteSetNo)
+            }
+            if (this.setDataChanged) {
+                for (let i = 0; i < this.setData.length; i++) {
+                    noteList.push(this.setData[i].no);
+                }
+                data['noteList'] = noteList
             }
             var that = this;
             this.axios({
-                url: "/api/note-set/add",
+                url: "/api/note-set/edit",
                 method: 'post',
                 data: data,
                 headers: { 'Content-Type': 'application/json' }
             })
             .then(function (res) {
                 Message.success({
-                    content: "创建成功",
+                    content: "修改成功",
                     duration: 1,
                     onClose: () => {
                         that.$router.push("/notePlate");

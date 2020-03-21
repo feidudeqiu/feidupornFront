@@ -34,7 +34,7 @@
             </div>
           </div>
           <div style="display:flex;width:100%;justify-content: flex-end;">
-            <input v-model="captcha" style="position:relative" maxlength="6" class="input-register input-background-captcha" placeholder="邮箱验证码"/>
+            <input @keyup.enter="register()" v-model="captcha" style="position:relative" maxlength="6" class="input-register input-background-captcha" placeholder="邮箱验证码"/>
             <div class="button-captcha flex-row-center"  id="bt-getCaptcha" @click="sendCaptcha()">
               <span >{{captchaMessage}}</span>
             </div>
@@ -197,7 +197,7 @@ export default {
         },
         refreshCode () {
             var num = Math.ceil(Math.random() * 1000);
-            this.imgUrl = 'api/register/get-verify-code' + "?" + num;
+            this.imgUrl = '/api/register/get-verify-code' + "?" + num;
             this.verifyCodeError = false;
         },
         beforeClose (action, done) {

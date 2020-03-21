@@ -5,10 +5,8 @@ import App from './App'
 import router from './router/router'
 import axios from 'axios'
 import VueCookie from "vue-cookie"
-import {Message} from "view-design"
 Vue.prototype.axios = axios
 Vue.config.productionTip = false
-Vue.component("Message", Message)
 router.beforeEach((to, from, next) => {
   /* 路由发生变化修改页面title */
   if (to.meta.title) {
@@ -22,5 +20,14 @@ new Vue({
   router,
   components: { App },
   template: '<App/>'
+})
+axios.interceptors.request.use(config => {
+	if (/get/i.test(config.method)) { 
+		config.params  =  config.params || {};
+		config.params.t = Date.parse(new Date()) / 1000;
+	}
+    return config;
+}, error => {
+    return Promise.reject(error);
 })
 

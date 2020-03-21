@@ -27,13 +27,13 @@
                         </RadioGroup>
                     </div>
                     <div class="flex-row-inline" style="justify-content:space-around;margin-bottom:20px;margin-top:10px;">  
-                        <i-button :disabled="disabled" :loading="loading" type="success" @click="upload()">发布</i-button>
+                        <button style="width:90px;height:30px;background:#19be6b;color:white;cursor:pointer" @click="upload()">保存</button>
                     </div>
                 </div>
             </Drawer>
             <div style="width:100%;display:flex;flex-direction:column;padding-bottom:10px;">
                 <Input placeholder="文章标题" v-model="title" type="textarea" maxlength="100" show-word-limit style="width:100%;margin-top:20px;margin-bottom:20px;box-shadow:rgba(0, 0, 0, 0.1) 0px 2px 12px 0px"/>
-                <mavon-editor @imgAdd="$imgAdd" @imgDel="$imgDel"
+                <mavon-editor  @change="changed=true"  @imgAdd="$imgAdd" @imgDel="$imgDel"
                     v-model="content" ref="md" style="flex:1;min-height: 450px;width:100%;" :style="{'z-index':zIndex}" placeholder="文章正文" @fullScreen="zIndex = 100" />
             </div>
         </div>
@@ -80,17 +80,16 @@ span {
 </style>
 <script>
 import { mavonEditor } from 'mavon-editor'
-import { Drawer, Button, Input, Affix, RadioGroup, Radio, Message } from 'view-design';
+import { Drawer, Input, Affix, RadioGroup, Radio, Message } from 'view-design';
 import Head from "@/Head.vue"
 import 'mavon-editor/dist/css/index.css'
 export default {
-    name: "AddNote",
+    name: "EditNote",
     components: {
         mavonEditor,
         "porn-head": Head,
         Input,
         Affix,
-        "i-button": Button,
         Drawer,
         RadioGroup, Radio
     },
@@ -104,8 +103,7 @@ export default {
             img_file: {},
             setFlag: false,
             height: 325,
-            loading: false,
-            disabled: false
+            changed: false
         }
     },
     mounted () {
@@ -117,6 +115,27 @@ export default {
         }
     },
     methods: {
+        load () {
+            var that = this;
+            var url = '/api/note/get-note?' + 'noteNo=' + this.$route.query.noteNo;
+            this.axios.get(url)
+            .then(function (res) {
+                that.content = res.data;
+            })
+            .catch(function (err) {
+                Message.error(err.response.data.msg);
+            })
+            url = '/api/note/get-note-outline?' + 'noteNo=' + this.$route.query.noteNo;
+            this.axios.get(url)
+            .then(function (res) {
+                that.title = res.data.noteOutline.title;
+                that.noteType =  res.data.noteOutline.type;
+                that.commentable = '' + res.data.noteOutline.commentable;
+            })
+            .catch(function (err) {
+                Message.error(err.response.data.msg);
+            })
+        },
         $imgAdd (pos, $file) {
             // 缓存图片信息
             this.img_file[pos] = $file;
@@ -132,20 +151,18 @@ export default {
                 formdata.append(_img, this.img_file[_img]);
             }
             formdata.append("content", new Blob([this.content]));
-            this.loading = true;
             this.axios({
-                url: '/api/note/add?' +
-                    'title=' + this.title + 
+                url: '/api/note/edit?' + 
+                    'noteNo=' + this.$route.query.noteNo + 
+                    '&title=' + this.title + 
                     '&noteType=' + this.noteType + 
                     '&commentable=' + this.commentable,
                 method: 'post',
                 data: formdata,
                 headers: { 'Content-Type': 'multipart/form-data' }
             }).then((res) => {
-                that.disabled = true;
-                that.loading = false;
                 Message.success({
-                    content: "发布成功",
+                    content: "修改成功",
                     duration: 1,
                     onClose: () => {
                         that.$router.push("/notePlate");
@@ -153,7 +170,6 @@ export default {
                     closable: true
                 })
             }).catch((err) => {
-                that.loading = false;
                 Message.error(err.response.data.msg)
             })
         },

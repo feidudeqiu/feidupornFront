@@ -8,15 +8,15 @@
                 <img src="~static/img/usercenter.png">
                 <span>我的资料</span>
             </a>
-            <a class="flex-row-inline menu-item" href="/userCenter/message">
-                <img src="~static/img/message.png">
-                <span>我的消息</span>
-            </a>
             <a class="flex-row-inline menu-item" href="/userCenter/security">
                 <img src="~static/img/security.png">
                 <span>安全中心</span>
             </a>
-        </div>4
+            <a class="flex-row-inline menu-item" href="/userCenter/callback">
+                <img src="~static/img/callback.png">
+                <span>反馈</span>
+            </a>
+        </div>
     </div>
 </template>
 <style scoped>

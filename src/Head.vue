@@ -1,8 +1,8 @@
 <template>
-    <div style="width:100%;">
+    <div style="width:100%;" :style="{'min-width': ( minWidth === -1 ? '' : minWidth + 'px' )}">
         <div class="head flex-row-center">
-            <div class="flex-row-center" style="flex:2;">
-                <img src="~static/img/logo.png" @click="$router.push('/index')" style="cursor:pointer"/>
+            <div class="flex-row-center" style="flex:2;min-width:150px;">
+                <a class="flex-row-center" href="/index" style="height:60px;"><img src="~static/img/logo.png" style="width:100%;max-width:200px;"/></a>
             </div>
             <div class="flex-row-center" style="flex:4;">
                 <input class="search-input" placeholder="搜索"  />
@@ -13,38 +13,48 @@
                 <img style="cursor:pointer" class="icon-small" src="~static/img/search.png" />
                 </div>
             </div>
-            <div style="height:50px;display:flex;flex:2;">
-                <div class="mine" style="position:relative;">
-                <a :href="logged?'/userCenter':'/login'" target="_blank">
+            <div style="height:50px;display:flex;justify-content:center;flex:2;min-width:150px;">
+                <div class="mine" style="position:relative;margin-left:50px;margin-right:50px;">
                     <img id="profilePhoto" class="profile" :src="userInfo.icon" />
-                </a>
-                <div v-if="logged" class="flex-column-inline menu">
-                    <div class="text-black text-h4 text-thick">{{userInfo.nickName}}</div>
-                    <div class="menu-item">
-                        <a class="flex-row-inline" href="/userCenter" target="_blank">
-                            <img class="menu-icon" src="~static/img/usercenter.png">
-                            <div class="choice">个人中心</div>
-                        </a>
+                    <div v-if="logged" class="flex-column-inline menu">
+                        <div class="text-black text-h4 text-thick" style="text-align:center;">{{userInfo.nickName}}</div>
+                        <div class="menu-item">
+                            <a class="flex-row-inline" href="/userCenter" target="_blank">
+                                <img class="menu-icon" src="~static/img/usercenter.png">
+                                <div class="choice">个人中心</div>
+                            </a>
+                        </div>
+                        <div class="flex-row-inline menu-item" @click="$router.push('/addNote');">
+                            <img class="menu-icon" src="~static/img/book.png">
+                            <div class="choice">创建文章</div>
+                        </div>
+                        <div class="flex-row-inline menu-item" @click="$router.push('/notePlate');">
+                            <img class="menu-icon" src="~static/img/books.png">
+                            <div class="choice">管理文集</div>
+                        </div>
+                        <div class="flex-row-inline menu-item" @click="$router.push('/pictureBed');">
+                            <img class="menu-icon" src="~static/img/pictures.png">
+                            <div class="choice">我的图床</div>
+                        </div>
+                        <div class="flex-row-inline menu-item" @click="$router.push('/userCenter/callback');">
+                            <img class="menu-icon" src="~static/img/callback.png">
+                            <div class="choice">反馈</div>
+                        </div>
+                        <div class="flex-row-inline menu-item" @click="logoutConfirm = true;">
+                            <img class="menu-icon" src="~static/img/logout.png">
+                            <div class="choice">退出</div>
+                        </div>
                     </div>
-                    <div class="flex-row-inline menu-item" @click="logoutConfirm = true">
-                        <img class="menu-icon" src="~static/img/message.png">
-                        <div class="choice">我的消息</div>
+                    <div v-else class="flex-column-inline menu">
+                        <div class="flex-row-inline menu-item" @click="$router.push('/login');">
+                            <img class="menu-icon" src="~static/img/login.png">
+                            <div class="choice">登录</div>
+                        </div>
+                        <div class="flex-row-inline menu-item"  @click="$router.push('/register');">
+                            <img class="menu-icon" src="~static/img/register.png">
+                            <div class="choice">注册</div>
+                        </div>
                     </div>
-                    <div class="flex-row-inline menu-item" @click="logoutConfirm = true">
-                        <img class="menu-icon" src="~static/img/logout.png">
-                        <div class="choice">登出</div>
-                    </div>
-                </div>
-                <div v-else class="flex-column-inline menu">
-                    <div class="flex-row-inline menu-item" @click="$router.push('/login');">
-                        <img class="menu-icon" src="~static/img/login.png">
-                        <div class="choice">登录</div>
-                    </div>
-                    <div class="flex-row-inline menu-item"  @click="$router.push('/register');">
-                        <img class="menu-icon" src="~static/img/register.png">
-                        <div class="choice">注册</div>
-                    </div>
-                </div>
                 </div>
             </div>
         </div>
@@ -54,16 +64,17 @@
 </template>
 <style scoped>
 .head {
-    height: 75px;
+    height: 60px;
     width:100%;
     background-image: url("~static/img/header.jpg");
 }
 .search-input {
     height:35px;
-    padding:0 0 0 20px;
+    padding:0 0 0 10px;
     border:none;
     outline:medium;
-    width:320px;
+    width:100%;
+    max-width:320px;
     border-top-left-radius: 5px;
     border-bottom-left-radius: 5px;
     font-size: 14px;
@@ -100,7 +111,7 @@
     height:20px;
 }
 .mine:hover .profile {
-    transform: scale(1.5);
+    transform: scale(1.2);
     transition: all 0.3s;
 }
 .mine:hover .menu{
@@ -129,7 +140,6 @@
 }
 </style>
 <script>
-import {LoginController} from "@/assets/js/common.js"
 import { Toast, Dialog } from "vant"
 export default {
     name: "Head",
@@ -145,32 +155,72 @@ export default {
             logoutConfirm: false
         }
     },
+    props: {
+        minWidth: {
+            type: Number,
+            default: -1
+        }
+    },
     created () {
         var that = this;
-        function success () {
-            that.axios.get('/api/index/get-user-info').then(function (res) {
-                that.userInfo = res.data.userInfo;
-                sessionStorage.setItem("logged", true);
-                that.logged = true;
-            }).catch(function (error) {
-                that.logged = false;
-                sessionStorage.setItem("logged", false);
-                console.info(error);
-            })
-        }
-        that.logged = LoginController.loginControl(success);
+        this.axios.get('/api/index/get-user-info')
+        .then(function (res) {
+            that.logged = true;
+            that.userInfo = res.data.userInfo;
+            if (that.$parent.load) {
+                that.$parent.load(res.data);
+            }
+            if (that.$parent.unsignedLoad) {
+                that.$parent.unsignedLoad();
+            }
+        }).catch(function (err) {
+            that.handleErr(err);
+            var token = localStorage.getItem("token");
+            if (token !== null) {
+                that.axios.post("/api/login/login-token", {"token": token})
+                .then(function (res) {
+                    if (that.$parent.unsignedLoad) {
+                        that.$parent.unsignedLoad();
+                    }
+                    that.axios.get('/api/index/get-user-info')
+                    .then(function (res) {
+                        that.logged = true;
+                        that.userInfo = res.data.userInfo;
+                        if (that.$parent.load) {
+                            that.$parent.load(res.data);
+                        }
+                    })
+                    .catch(function (err) {
+                        that.handleErr(err);
+                    })
+                })
+                .catch(function (err) {
+                    if (that.$parent.unsignedLoad) {
+                        that.$parent.unsignedLoad();
+                    }
+                    that.handleErr(err);
+                    if (err.response.data.code >= 2) {
+                        localStorage.removeItem("token");
+                        localStorage.removeItem("tokenTTL");
+                    }
+                })
+            } else {
+                if (that.$parent.unsignedLoad) {
+                    that.$parent.unsignedLoad();
+                }
+            }
+        })
     },
     methods: {
         logout () {
             var that = this;
-            this.axios.post('/api/login/logout')
+            this.axios.get('/api/login/logout')
             .then(function (res) {
                 that.logged = false;
                 that.userInfo = {icon: "http://127.0.0.1:8080/global/defaultIcon.png"};
-                sessionStorage.setItem("logged", false);
                 localStorage.removeItem("token");
                 localStorage.removeItem("tokenTTL");
-                that.$router.push("/index");
+                that.$parent.$router.push("/login");
             })
             .catch(function (err) {
                 Toast.fail(err.response.data.msg);
@@ -183,6 +233,9 @@ export default {
             } else {
                 done();
             }
+        },
+        handleErr (err) {
+            err = null;
         }
     }
 }

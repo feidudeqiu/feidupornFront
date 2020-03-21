@@ -2,7 +2,7 @@
     <div>
         <div class="head">
             <div class="flex-row-center" style="flex:1;">
-                <img src="~static/img/logo.png">
+                <a href="/index"><img src="~static/img/logo.png"></a>
             </div>
         </div>
         <div class="content flex-column-center" style="margin-top:30px;">
@@ -13,15 +13,15 @@
                 <div class="password-item flex-column-center">
                     <div style="width: fit-content;">
                         <input maxlength="20" class="input-login input-background-username" v-model="identity" placeholder="用户名或邮箱">
-                        <input type="password" maxlength="16" class="input-login input-background-pwd" style="margin-bottom:10px;" v-model="password" placeholder="密码">
+                        <input @keyup.enter="login()" type="password" maxlength="16" class="input-login input-background-pwd" style="margin-bottom:10px;" v-model="password" placeholder="密码">
                         <div class="flex-row-center">
                             <div class="flex-row-inline" style="justify-content: space-between;width:100%;">
                                 <div class="flex-row-inline" v-if="allowLocalStorage">
                                     <van-checkbox shape="square" checked-color="#2d8cf0" icon-size="12px" v-model="remembered">&thinsp;</van-checkbox>
-                                    <div style="color: #2b85e4;font-size: 12px;" >七天内记住我</div>
+                                    <div style="color: #2b85e4;font-size: 12px;cursor:pointer" @click="remembered = !remembered" >七天内记住我</div>
                                 </div>
                                 <div v-else></div>
-                                <div style="color: #2b85e4;font-size: 12px;">忘记密码</div>
+                                <a href="/forgetPassword"><div style="color: #2b85e4;font-size: 12px;">忘记密码</div></a>
                             </div>
                         </div>
                         <div class="flex-row-center">
@@ -84,13 +84,26 @@
     border-radius: 5px;
     font-weight: 800;
 }
+.demo-spin-icon-load{
+    animation: ani-demo-spin 1s linear infinite;
+}
+@keyframes ani-demo-spin {
+    from { transform: rotate(0deg);}
+    50%  { transform: rotate(180deg);}
+    to   { transform: rotate(360deg);}
+}
 </style>
 <script>
-import { Toast, Checkbox } from "vant"
+import {Checkbox} from "vant"
+import {Spin, Message, Icon} from "view-design"
+import Vue from 'vue'
+Vue.component('Icon', Icon);
 export default {
     name: 'Login',
     components: {
-        "van-checkbox": Checkbox
+        "van-checkbox": Checkbox,
+        Spin,
+        Icon
     },
     data () {
         return {
@@ -115,12 +128,27 @@ export default {
                 password: this.password,
                 remembered: this.remembered
             }
+            Spin.show({
+                    render: (h) => {
+                        return h('div', [
+                            h('Icon', {
+                                'class': 'demo-spin-icon-load',
+                                props: {
+                                    type: 'ios-loading',
+                                    size: 18
+                                }
+                            }),
+                            h('div', '登陆中')
+                        ])
+                    }
+                });
             this.axios
                 .post("/api/login/login-post", data)
                 .then(function (res) {
+                    Spin.hide();
                     if (that.remembered) {
                         var storage = window.localStorage;
-                        if (storage != null) {
+                        if (storage !== undefined) {
                             storage.setItem("token", res.data.token);
                             storage.setItem("tokenTTL", res.data.tokenTTL);
                         }
@@ -129,7 +157,8 @@ export default {
                     that.$router.replace("/index");
                 })
                 .catch(function (err) {
-                    Toast.fail(err.response.data.msg);
+                    Spin.hide();
+                    Message.error(err.response.data.msg);
                 })
         },
         register () {
