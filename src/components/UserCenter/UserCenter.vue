@@ -10,21 +10,21 @@
                         <div style="width:4px;height:21px;background:#00A1D7;border-radius:4px;"></div>
                         <span style="padding-left:10px;color:#17233d;font-size:15px;">我的资料</span>
                     </div>
-                    <form class="content-body">
+                    <div class="content-body">
                         <div style="width:100px;height:100px;border-radius:50%;position:relative;margin-top: 10px;">
-                            <img class="profile" :src="userInfo.icon">
+                            <img class="profile" :src="icon">
                             <input title="点击修改头像" type="file" @change="previewPic" name="icon" accept="image/*" style="cursor: pointer;width:100px;height:100px;border-radius:50%;opacity: 0;position: absolute;z-index: 11;top:0;left:0;">
                         </div>
                         <div style="width:300px;color:#48576a;margin-top:20px;" class="flex-row-inline">
                             <div style="padding-right:20px;width:80px;text-align:right;">用户名:</div>
-                            <div style="width:207px;text-align:left">{{userInfo.userName}}</div>
+                            <div style="width:207px;text-align:left">{{username}}</div>
                         </div>
                         <div style="width:300px;color:#48576a;margin-top:20px;" class="flex-row-inline">
                             <div style="padding-right:20px;width:80px;text-align:right;">昵称:</div>
-                            <input class="nickNameInput" name="nickName" v-model="userInfo.nickName">
+                            <input class="nickNameInput" name="nickName" v-model="nickname">
                         </div>
-                        <button @click="upload()"  style="text-align:center" class="submit" >保存</button>
-                    </form>
+                        <button :disabled="!iconFile&&originNickname==nickname" :loading="uploading"  @click="upload()"  style="text-align:center" class="submit" >保存</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -95,10 +95,12 @@ export default {
     data () {
         return {
             nickName: '',
-            userInfo: {
-                icon: "http://127.0.0.1:8080/global/defaultIcon.png"
-            },
-            iconFile: ''
+            icon: '',
+            username: '',
+            nickname: '',
+            iconFile: '',
+            uploading: false,
+            originNickname: ''
         }
     },
     created () {
@@ -109,8 +111,10 @@ export default {
             var that = this;
             this.axios.get("/api/user-center/get-user-info")
             .then(function (res) {
-                that.userInfo = res.data.userInfo;
-                that.nickName = res.data.userInfo.nickName;
+                that.icon = res.data.userInfo.icon;
+                that.nickname = res.data.userInfo.nickName;
+                that.username = res.data.userInfo.userName;
+                that.originNickname = res.data.userInfo.nickName;
             })
             .catch(function (err) {
                 Message.error(err.response.data.msg);
@@ -123,7 +127,7 @@ export default {
             var fr = new FileReader();
             fr.readAsDataURL(file);
             fr.onload = function (e) {
-                that.userInfo.icon = e.target.result;
+                that.icon = e.target.result;
             }
         },
         upload () {
@@ -132,8 +136,8 @@ export default {
             if (this.iconFile) {
                 formdata.append("icon", this.iconFile);
             }
-            if (this.nickname !== this.userInfo.nickName) {
-                formdata.append("nickname", this.userInfo.nickName);
+            if (this.nickname !== this.originNickname) {
+                formdata.append("nickname", this.nickname);
             }
             this.axios({
                 url: '/api/user-center/edit-info?',
@@ -141,8 +145,8 @@ export default {
                 data: formdata,
                 headers: { 'Content-Type': 'multipart/form-data' }
             }).then((res) => {
-                that.$route.push("/userCenter");
                 Message.success("修改成功");
+                that.$route.push("/userCenter");
             }).catch((err) => {
                 Message.error(err.response.data.msg);
             })

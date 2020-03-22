@@ -149,7 +149,7 @@ export default {
     data () {
         return {
             userInfo: {
-                icon: "http://127.0.0.1:8080/global/defaultIcon.png"
+                icon: "http://www.feidudeqiu.xyz/global/defaultIcon.png"
             },
             logged: false,
             logoutConfirm: false
