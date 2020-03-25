@@ -3,7 +3,8 @@ node_modules/
 /dist/static/img/
 /dist/static/css/
 !/dist/static/css/app.*
-/dist/static/js/*.map
+/dist/static/css/*.css.map
+/dist/static/js/*.js.map
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
