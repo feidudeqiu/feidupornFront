@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Index from '@/components/Index'
 import Login from '@/components/Login'
+import Search from '@/components/Search'
 import ForgetPassword from '@/components/ForgetPassword'
 import Register from '@/components/Register'
 import UserCenter from '@/components/UserCenter/UserCenter'
@@ -34,6 +35,14 @@ export default new Router({
       component: Login,
       meta: {
         title: '登录'
+      }
+    },
+    {
+      path: '/search',
+      name: 'Search',
+      component: Search,
+      meta: {
+        title: '搜索'
       }
     },
     {

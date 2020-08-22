@@ -145,6 +145,7 @@ export default {
             this.axios
                 .post("/api/login/login-post", data)
                 .then(function (res) {
+                    console.info(res);
                     Spin.hide();
                     if (that.remembered) {
                         var storage = window.localStorage;

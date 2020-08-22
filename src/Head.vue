@@ -5,12 +5,12 @@
                 <a class="flex-row-center" href="/index" style="height:60px;"><img src="~static/img/logo.png" style="width:100%;max-width:200px;"/></a>
             </div>
             <div class="flex-row-center" style="flex:4;">
-                <input class="search-input" placeholder="搜索"  />
+                <input class="search-input" placeholder="搜索" v-model="keyword" />
                 <div
                 class="flex-row-center"
                 style="width:50px;height:35px;background:lightgray;border-top-right-radius: 5px;border-bottom-right-radius: 5px;"
                 >
-                <img style="cursor:pointer" class="icon-small" src="~static/img/search.png" />
+                <img style="cursor:pointer" class="icon-small" src="~static/img/search.png" @click="search()" />
                 </div>
             </div>
             <div style="height:50px;display:flex;justify-content:center;flex:2;min-width:150px;">
@@ -151,6 +151,7 @@ export default {
             userInfo: {
                 icon: "http://www.feidudeqiu.xyz/global/defaultIcon.png"
             },
+            keyword: '',
             logged: false,
             logoutConfirm: false
         }
@@ -236,6 +237,14 @@ export default {
         },
         handleErr (err) {
             err = null;
+        },
+        search () {
+            console.info("click");
+            if (this.keyword !== '') {
+                this.$parent.$router.push("/search", {keyword: this.keyword});
+            } else {
+                console.info("del")
+            }
         }
     }
 }

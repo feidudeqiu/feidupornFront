@@ -176,7 +176,6 @@ export default {
                             })
                     },
                     slot: 'action',
-                    width: 210,
                     align: 'center'
                 }
             ],
