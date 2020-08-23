@@ -6,7 +6,7 @@
             </div>
         </div>
         <div style="display:flex;flex-direction:column;align-items:center;margin-top:20px;">
-            <Input v-model="keyword" search enter-button placeholder="输入关键字" style="width: 300px" />
+            <Input @on-search="search()" v-model="keyword" search enter-button placeholder="输入关键字" style="width: 300px" />
             <Tabs type="card" style="margin-top:20px;width:800px;">
                 <TabPane label="用户" >
                     <div class="flex-row-wrap">
@@ -65,7 +65,18 @@
     </div>
 </template>
 <style scoped>
-
+.note-item {
+    display: flex;
+    flex-direction: column;
+    width:220px;
+    height:110px;
+    border-radius: 5px;
+    cursor: pointer;
+    position:relative;
+}
+div {
+    text-align:left;
+}
 </style>
 <script>
 import {Message, Input, Tabs, TabPane, Card, Avatar, List, ListItem} from "view-design"
@@ -94,6 +105,9 @@ export default {
     methods: {
         search () {
             var that = this;
+            var stateObject = {};
+            var newUrl = "/search?keyword=" + this.keyword;
+            history.pushState(stateObject, null, newUrl);
             this.axios.get("/api/index/search?keyword=" + this.keyword)
             .then(function (res) {
                 that.notes = res.data.notes;
@@ -125,12 +139,7 @@ export default {
             return  year + '-' + add0(month) + '-' + add0(day) + ' ' + add0(hour) + ':' + add0(minute) + ':' + add0(second);
         },
         gotoNote (noteNo) {
-            var url = "/noteSet?";
-            url += "noteSetNo=" + this.setNo;
-            if (this.setNo === 0) {
-                url += "&username=" + this.userInfo.userName;
-            }
-            url += "&noteNo=" + noteNo;
+            var url = "/note?noteNo=" + noteNo;
             this.$router.push(url);
         }
     }

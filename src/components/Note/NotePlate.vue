@@ -128,7 +128,8 @@ export default {
             setNo: 0,
             allNoteData: null,
             username: '',
-            userInfo: []
+            userInfo: [],
+            init: false
         }
     },
     mounted () {
@@ -255,6 +256,21 @@ export default {
             .catch(function (err) {
                 Message.error(err.response.data.msg);
             })
+            this.init = true;
+        },
+        unsignedLoad () {
+            var that = this;
+            if (this.init === false) {
+                var url = "/api/note-set/get?username=" + this.$route.query.username;
+                this.getAllNotesInfo();
+                this.axios.get(url)
+                .then(function (res) {
+                    that.noteSetList = res.data.noteSetList;
+                })
+                .catch(function (err) {
+                    Message.error(err.response.data.msg);
+                })
+            }
         },
         getNotesInfoBySetNo (setNo) {
             var that = this;

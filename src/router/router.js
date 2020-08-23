@@ -14,6 +14,7 @@ import AddNoteSet from '@/components/Note/AddNoteSet'
 import EditNote from '@/components/Note/EditNote'
 import EditNoteSet from '@/components/Note/EditNoteSet'
 import NoteSet from '@/components/Note/NoteSet'
+import Note from '@/components/Note/Note'
 import NotePlate from '@/components/Note/NotePlate'
 import PictureBed from '@/components/Picture/PictureBed'
 Vue.use(Router)
@@ -131,6 +132,14 @@ export default new Router({
       component: NoteSet,
       meta: {
         title: '文集'
+      }
+    },
+    {
+      path: '/note',
+      name: 'Note',
+      component: Note,
+      meta: {
+        title: '文章'
       }
     },
     {

@@ -5,7 +5,7 @@
                 <a class="flex-row-center" href="/index" style="height:60px;"><img src="~static/img/logo.png" style="width:100%;max-width:200px;"/></a>
             </div>
             <div class="flex-row-center" style="flex:4;">
-                <input class="search-input" placeholder="搜索" v-model="keyword" />
+                <input class="search-input" @keyup.enter="search()" placeholder="搜索" v-model="keyword" />
                 <div
                 class="flex-row-center"
                 style="width:50px;height:35px;background:lightgray;border-top-right-radius: 5px;border-bottom-right-radius: 5px;"
@@ -239,11 +239,15 @@ export default {
             err = null;
         },
         search () {
-            console.info("click");
             if (this.keyword !== '') {
-                this.$parent.$router.push("/search", {keyword: this.keyword});
+                this.$parent.$router.push({
+                    path: "/search",
+                    query: {
+                        keyword: this.keyword
+                    }
+                });
             } else {
-                console.info("del")
+                
             }
         }
     }
