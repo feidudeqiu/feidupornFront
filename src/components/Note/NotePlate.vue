@@ -59,7 +59,7 @@
                                 </div>
                             </div>
                             <template slot="extra" v-if="note.image">
-                                <img :src="note.image" style="width: 280px;height:120px;border-radius:10px;">
+                                <img :src="'https://www.feidudeqiu.xyz/picture/'+note.image" style="width: 280px;height:120px;border-radius:10px;">
                             </template>
                         </ListItem>
                     </List>
