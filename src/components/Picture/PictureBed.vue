@@ -224,7 +224,7 @@ export default {
         },
         view (index) {
             var images = [];
-            images.push(this.tableData[index].url);
+            images.push("https://www.feidudeqiu.xyz/picture/" + this.tableData[index].url);
             ImagePreview({
                 images: images,
                 closeable: true
