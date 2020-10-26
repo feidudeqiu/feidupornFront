@@ -21,8 +21,10 @@
     "view-design": "^4.1.2",
     "vue": "^2.5.2",
     "vue-cookie": "^1.1.4",
+    "vue-cropper": "^0.5.0",
     "vue-meditor": "^2.1.1",
-    "vue-router": "^3.0.1"
+    "vue-router": "^3.0.1",
+    "vuex": "^3.5.1"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",
@@ -59,6 +61,8 @@
     "html-webpack-plugin": "^2.30.1",
     "jest": "^22.0.4",
     "jest-serializer-vue": "^0.3.0",
+    "less": "^3.12.2",
+    "less-loader": "^4.1.0",
     "nightwatch": "^0.9.12",
     "node-notifier": "^5.1.2",
     "optimize-css-assets-webpack-plugin": "^3.2.0",

@@ -4,7 +4,11 @@ import Vue from 'vue'
 import App from './App'
 import router from './router/router'
 import axios from 'axios'
-import VueCookie from "vue-cookie"
+import VueCropper from 'vue-cropper'
+import store from 'store';
+
+Vue.use(VueCropper);
+
 Vue.prototype.axios = axios
 Vue.config.productionTip = false
 router.beforeEach((to, from, next) => {
@@ -19,7 +23,8 @@ new Vue({
   el: '#app',
   router,
   components: { App },
-  template: '<App/>'
+  template: '<App/>',
+  store,
 })
 axios.interceptors.request.use(config => {
 	if (/get/i.test(config.method)) { 

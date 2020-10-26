@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Index from '@/components/Index'
+import Index from '@/components/home/Index'
 import Login from '@/components/Login'
 import Search from '@/components/Search'
 import ForgetPassword from '@/components/ForgetPassword'
@@ -17,6 +17,10 @@ import NoteSet from '@/components/Note/NoteSet'
 import Note from '@/components/Note/Note'
 import NotePlate from '@/components/Note/NotePlate'
 import PictureBed from '@/components/Picture/PictureBed'
+
+const Apps = () => import('@/components/Apps/Apps');
+const UploadApp = () => import('@/components/UploadApp/UploadApp');
+
 Vue.use(Router)
 export default new Router({
   mode: 'history',
@@ -157,7 +161,22 @@ export default new Router({
       meta: {
         title: '图床'
       }
-    }
+    },
+    {
+      path: '/apps/:appname',
+      name: 'Apps',
+      component: Apps,
+      meta: {
 
+      }
+    },
+    {
+      path: '/uploadapp',
+      name: 'UploadApp',
+      component: UploadApp,
+      meta: {
+        
+      }
+    }
   ]
 })

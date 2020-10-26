@@ -37,6 +37,8 @@ module.exports = {
     "no-multiple-empty-lines": [0],     // 取消禁止出现多行空行
     "object-property-newline": [0],     // 取消强制将对象的属性放在不同的行上
     "no-trailing-spaces": [0],          // 取消不允许使用尾随空间
-    "one-var": [0]                      // 不再强制变量必须一起或分开声明
+    "one-var": [0],                     // 不再强制变量必须一起或分开声明
+    "comma-dangle": ["error", "only-multiline"],
+    "vue/no-parsing-error": [2, { "x-invalid-end-tag": false }]
   }
 }

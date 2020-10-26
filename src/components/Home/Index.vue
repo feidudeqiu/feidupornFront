@@ -25,10 +25,9 @@
         <div class="flex-row-inline" style="margin-top:20px;margin-left: 20px">
           <img class="icon-middle" src="~static/img/kit.png" />
           <span class="text-h4 text-thick text-gray">我的工具</span>
-          <span style="margin-left:30px;color:#c5c8ce">敬请期待</span>
         </div>
         <div class="flex-row-wrap" style="justify-content:space-around">
-            
+          <home-item v-for="app of appList" :key="app.enName" :poster="app.poster" :to="'/apps/' + app.enName" :app-name="app.chName"></home-item>
         </div>
       </div>
     </div>
@@ -41,15 +40,21 @@
   </div>
 </template>
 <script>
-import Head from "@/Head.vue"
+import Head from '@/Head.vue';
+import HomeItem from './HomeItem';
+import { getApps } from 'network/home';
+import { Message } from 'view-design';
+
 export default {
   name: "Index",
   components: {
-    "porn-head": Head
+    "porn-head": Head,
+    HomeItem
   },
   data () {
     return {
-      noteSetList: []
+      noteSetList: [],
+      appList: []
     }
   },
   methods: {
@@ -59,11 +64,20 @@ export default {
         that.noteSetList = res.data.noteSetList;
       }).catch(function (error) {
         console.info(error);
-      })
+      });
+      getApps()
+      .then(success => {
+        if (success.code === 0) {
+          this.appList = success.appList;
+        } else {
+          Message.error('获取信息失败');
+        }
+      }, err => {
+        Message.error('获取信息失败');
+        console.log(err);
+      });
     }
   },
-  created () {
-  }
 };
 </script>
 <style scoped>

@@ -12,7 +12,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/api': {
-              target: 'https://www.feidudeqiu.xyz/api', //你要访问的服务器域名
+              target: 'http://www.feidudeqiu.xyz/api', //你要访问的服务器域名
               changeOrigin: true, //允许跨域
               pathRewrite: {
                 '^/api': ''   //需要rewrite重写的,
